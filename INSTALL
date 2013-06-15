@@ -1,0 +1,10 @@
+APrOS, a fully customizable Operating System.
+    Copyright (C) 2013  Luk2010
+
+Installation procedure
+----------------------
+
+You should have a correct gcc full installation, and a valid grub system.
+
+Just type 'make'.
+It should create 'apros.iso'. Boot on it to see the operating system.
