@@ -6,5 +6,10 @@ Installation procedure
 
 You should have a correct gcc full installation, and a valid grub system.
 
-Just type 'make'.
+Just run the 'create_iso' script. Youmust have a valid i586-elf gcc cross compiler
+installation, see http://wiki.osdev.org/GCC_Cross-Compiler for more informations.
+
+It use the i586-elf target.
+Use 'sudo sh create_iso.sh' to create the iso file.
+
 It should create 'apros.iso'. Boot on it to see the operating system.

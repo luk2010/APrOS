@@ -3,47 +3,38 @@
 # to boot the Operating System.
 # You must have a valid grub installation to perform the image creation.
 
-CC=gcc
-CFLAGS  = -Wall -nostdlib -nostdinc -ffreestanding -march=i386 -m32
-LDFLAGS = --warn-common -melf32_x86_64 --gc-sections
+AS=~/opt/cross/bin/i586-elf-as
+CC=~/opt/cross/bin/i586-elf-gcc
 
-OBJECTS = bootstrap/boot.o kernel/kernel.o
-KERNEL_OBJ   = kernel.elf
+all:
+	# Bootstrap
+	$(AS) bootstrap/boot.s -o bootstrap/boot.o
 
-MULTIBOOT_IMAGE = apros.iso
-PWD := $(shell pwd)
+	# Kernel
+	$(CC) -c kernel/kernel.c -o kernel/kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
 
-# main target
-all: $(MULTIBOOT_IMAGE)
+	# Linking
+	$(CC) -T support/apros.lds -o apros.bin -ffreestanding -O2 -nostdlib bootstrap/boot.o kernel/kernel.o
 
-#Iso target
-$(MULTIBOOT_IMAGE): $(KERNEL_OBJ)
-	mkdir iso/
+	# Creating bootable iso file.
+	mkdir -p iso
+	mkdir -p iso/boot
+	cp apros.bin iso/boot/kernel.bin
 	mkdir -p iso/boot/grub
 	cp extra/grub.cfg iso/boot/grub/grub.cfg
-	cp $(KERNEL_OBJ) iso/$(KERNEL_OBJ)
-	grub-mkrescue -o $(MULTIBOOT_IMAGE) iso
+	grub-mkrescue -o apros.iso iso
 
-#kernel image
-$(KERNEL_OBJ): $(OBJECTS) ./support/apros.lds
-	$(LD) $(LDFLAGS) -T ./support/apros.lds -o $@ $(OBJECTS)
-	-nm -C $@ | cut -d ' ' -f 1,3 > apros.map
-
-# Create objects from C source code
-%.o: %.c
-	$(CC) -I$(PWD) -c $< $(CFLAGS) -o $@
-
-# Create objects from assembler (.S) source code
-%.o: %.S
-	$(CC) -I$(PWD) -c $< $(CFLAGS) -DASM_SOURCE=1 -o $@
+test_qemu: all
+	qemu-system-i386 -cdrom apros.iso
 
 # Clean directory
 clean:
 	$(RM) *.img *.o mtoolsrc *~ menu.txt *.img *.elf *.bin *.map *.iso
-	$(RM) *.log *.out bochs*
+	$(RM) *.log *.out *.bochs
 	$(RM) bootstrap/*.o bootstrap/*~
 	$(RM) kernel/*.o kernel/*~
 	$(RM) support/*~
 	$(RM) extra/*~
 	$(RM) -r iso
+	$(RM) -r boot
 
