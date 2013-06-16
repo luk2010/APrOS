@@ -11,10 +11,11 @@ all:
 	$(AS) bootstrap/boot.s -o bootstrap/boot.o
 
 	# Kernel
-	$(CC) -c kernel/kernel.c -o kernel/kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra
+	$(CC) -c kernel/terminal.c -o kernel/terminal.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -I.
+	$(CC) -c kernel/kernel.c -o kernel/kernel.o -std=gnu99 -ffreestanding -O2 -Wall -Wextra -I.
 
 	# Linking
-	$(CC) -T support/apros.lds -o apros.bin -ffreestanding -O2 -nostdlib bootstrap/boot.o kernel/kernel.o
+	$(CC) -T support/apros.lds -o apros.bin -ffreestanding -O2 -nostdlib bootstrap/boot.o kernel/kernel.o kernel/terminal.o
 
 	# Creating bootable iso file.
 	mkdir -p iso
