@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////
 /**
-    @file kernel.c
+    @file strlib.h
     
-    Main kernel function.
+    Regroup every str function.
 **/
 ///////////////////////////////////////////////////////////////////
 /* Copyright (C) 2013, Luk2010
@@ -22,17 +22,16 @@
    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
    USA. 
 */
+#ifndef APROS_STRLIB_H
+#define APROS_STRLIB_H
 
 #include <kernel/base.h>
-#include <kernel/terminal.h>
- 
-#if defined(__cplusplus)
-extern "C" /* Use C linkage for kernel_main. */
-#endif
-void kernel_main()
-{
-	terminal_initialize();
-	/* Since there is no support for newlines in terminal_putchar yet, \n will
-	   produce some VGA specific character instead. This is normal. */
-	terminal_writestring("Hello, kernel World!\n");
-}
+
+///////////////////////////////////////////////////////////////////
+/**
+ *  Return the lenght of a NULL-terminated string.
+**/
+///////////////////////////////////////////////////////////////////
+size_t strlen(const char *s);
+
+#endif // APROS_STRLIB_H

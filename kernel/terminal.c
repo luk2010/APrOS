@@ -24,6 +24,7 @@
    USA. 
 */
 
+#include <kernel/strlib.h>
 #include <kernel/terminal.h>
 
 static const size_t VGA_WIDTH = 80;
@@ -33,14 +34,6 @@ size_t terminal_row;
 size_t terminal_column;
 uint8_t terminal_color;
 uint16_t* terminal_buffer;
-
-size_t strlen(const char* str)
-{
-	size_t ret = 0;
-	while ( str[ret] != 0 )
-		ret++;
-	return ret;
-}
 
 uint8_t make_color(enum vga_color fg, enum vga_color bg)
 {

@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////
 /**
-    @file kernel.c
+    @file memlibc.c
     
-    Main kernel function.
+    Regroup every mem function.
 **/
 ///////////////////////////////////////////////////////////////////
 /* Copyright (C) 2013, Luk2010
@@ -23,16 +23,20 @@
    USA. 
 */
 
-#include <kernel/base.h>
-#include <kernel/terminal.h>
- 
-#if defined(__cplusplus)
-extern "C" /* Use C linkage for kernel_main. */
-#endif
-void kernel_main()
+#include <kernel/memlibc.h>
+
+void *memccpy(void *dst, const void *src, int c, size_t n)
 {
-	terminal_initialize();
-	/* Since there is no support for newlines in terminal_putchar yet, \n will
-	   produce some VGA specific character instead. This is normal. */
-	terminal_writestring("Hello, kernel World!\n");
+	char *q = dst;
+	const char *p = src;
+	char ch;
+
+	while (n--) {
+		*q++ = ch = *p++;
+		if (ch == (char)c)
+			return q;
+	}
+
+	return NULL;		/* No instance of "c" found */
 }
+
