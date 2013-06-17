@@ -1,0 +1,6 @@
+You must have on your computer :
+
+- complete gcc cross compiler for target i586-elf. 
+  http://wiki.osdev.org/GCC_Cross-Compiler
+  to make your own.
+- bochs or qemu to emulate the system from the generated iso.

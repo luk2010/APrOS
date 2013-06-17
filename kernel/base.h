@@ -30,6 +30,7 @@
 #endif
 #include <stddef.h>
 #include <stdint.h>
+#include <stdarg.h>
  
 /* Check if the compiler thinks if we are targeting the wrong operating system. */
 #if defined(__linux__)

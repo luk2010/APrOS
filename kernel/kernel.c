@@ -35,4 +35,6 @@ void kernel_main()
 	/* Since there is no support for newlines in terminal_putchar yet, \n will
 	   produce some VGA specific character instead. This is normal. */
 	terminal_writestring("Hello, kernel World!\n");
+
+	terminal_printf("This is the base string terminal system !\n");
 }
