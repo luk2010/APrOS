@@ -1,8 +1,11 @@
 ///////////////////////////////////////////////////////////////////
 /**
-    @file kernel.c
+    @file segment.h
     
-    Main kernel function.
+    Global and local (GDT/LDT) segment descriptor definition and
+    structure. These segments map virtual addresses (ie
+    data/instruction addresses, relative to these segment descriptors)
+    to linear addresses (ie addresses in the paged-memory space).
 **/
 ///////////////////////////////////////////////////////////////////
 /* Copyright (C) 2013, Luk2010
@@ -22,27 +25,21 @@
    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
    USA. 
 */
+#ifndef APROS_SEGMENT_H
+#define APROS_SEGMENT_H
 
 #include <kernel/base.h>
-#include <kernel/terminal.h>
-#include <kernel/gdt.h>
- 
-#if defined(__cplusplus)
-extern "C" /* Use C linkage for kernel_main. */
-#endif
-void kernel_main()
-{
-	terminal_cls(COLOR_LIGHT_BLUE);
-	terminal_setcolor(make_color(COLOR_WHITE, COLOR_LIGHT_BLUE));
-	/* Since there is no support for newlines in terminal_putchar yet, \n will
-	   produce some VGA specific character instead. This is normal. */
-	terminal_writestring("Hello, kernel World!\n");
 
-	terminal_printf("This is the base string terminal system !\n");
+#define APROS_SEG_NULL 0
+#define APROS_SEG_KCODE 1 /* Kernel code segment. */
+#define APROS_SEG_KDATA 2 /* kernel data segment. */
 
-	if(apros_setup_gdt() > 0)
-		terminal_printf("GDT correctly setted !\n");
+/**
+ * Helper macro that builds a segment register's value
+ */
+#define APROS_BUILD_SEGMENT_REG_VALUE(desc_privilege,in_ldt,seg_index) \
+  (  (((desc_privilege) & 0x3)  << 0) \
+   | (((in_ldt)?1:0)            << 2) \
+   | ((seg_index)               << 3) )
 
-	for(;;)
-		continue;
-}
+#endif // APROS_SEGMENT_H

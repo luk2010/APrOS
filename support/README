@@ -1,0 +1,4 @@
+Content of the support/ directory
+---------------------------------
+
+apros.lds : Linker script to correctly compile kernel. it is the 32bit version.

@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////
 /**
-    @file kernel.c
+    @file assert.h
     
-    Main kernel function.
+    Describes some basics assert macros.
 **/
 ///////////////////////////////////////////////////////////////////
 /* Copyright (C) 2013, Luk2010
@@ -22,27 +22,24 @@
    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
    USA. 
 */
+#ifndef APROS_ASSERT_H
+#define APROS_ASSERT_H
 
 #include <kernel/base.h>
 #include <kernel/terminal.h>
-#include <kernel/gdt.h>
- 
-#if defined(__cplusplus)
-extern "C" /* Use C linkage for kernel_main. */
+
+#define ASSERT_FATAL(expr) \
+	({ \
+     int __res=(int)(expr); \
+     if (! __res) { \
+       asm("cli\n"); /* disable interrupts -- x86 only */ \
+       terminal_printf("%s@%s:%d Assertion " # expr " failed\n", \
+			__PRETTY_FUNCTION__, __FILE__, __LINE__); \
+       for (;;) asm("hlt;") ; /* Infinite loop, ie simple system halt */ \
+     } \
+   })
+
 #endif
-void kernel_main()
-{
-	terminal_cls(COLOR_LIGHT_BLUE);
-	terminal_setcolor(make_color(COLOR_WHITE, COLOR_LIGHT_BLUE));
-	/* Since there is no support for newlines in terminal_putchar yet, \n will
-	   produce some VGA specific character instead. This is normal. */
-	terminal_writestring("Hello, kernel World!\n");
 
-	terminal_printf("This is the base string terminal system !\n");
 
-	if(apros_setup_gdt() > 0)
-		terminal_printf("GDT correctly setted !\n");
 
-	for(;;)
-		continue;
-}

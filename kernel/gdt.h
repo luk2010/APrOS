@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////
 /**
-    @file kernel.c
+    @file gdt.h
     
-    Main kernel function.
+    GDT functions.
 **/
 ///////////////////////////////////////////////////////////////////
 /* Copyright (C) 2013, Luk2010
@@ -22,27 +22,18 @@
    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
    USA. 
 */
+#ifndef APROS_GDT_H
+#define APROS_GDT_H
 
 #include <kernel/base.h>
-#include <kernel/terminal.h>
-#include <kernel/gdt.h>
- 
-#if defined(__cplusplus)
-extern "C" /* Use C linkage for kernel_main. */
-#endif
-void kernel_main()
-{
-	terminal_cls(COLOR_LIGHT_BLUE);
-	terminal_setcolor(make_color(COLOR_WHITE, COLOR_LIGHT_BLUE));
-	/* Since there is no support for newlines in terminal_putchar yet, \n will
-	   produce some VGA specific character instead. This is normal. */
-	terminal_writestring("Hello, kernel World!\n");
 
-	terminal_printf("This is the base string terminal system !\n");
+///////////////////////////////////////////////////////////////////
+/**
+ * Configure the virtual space as a direct mapping to the linear
+ * address space (ie "flat" virtual space).
+ * @return > 0 if okay, < 0 if error.
+**/
+///////////////////////////////////////////////////////////////////
+int apros_setup_gdt();
 
-	if(apros_setup_gdt() > 0)
-		terminal_printf("GDT correctly setted !\n");
-
-	for(;;)
-		continue;
-}
+#endif // APROS_GDT_H

@@ -1,0 +1,5 @@
+Content of the bootstrap/ directory
+-----------------------------------
+
+boot.s : Assembly file enabling multiboot support v0.6.96.
+Calls the kernel_main function with some argues.
