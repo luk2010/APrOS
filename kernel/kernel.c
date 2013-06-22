@@ -26,6 +26,7 @@
 #include <kernel/base.h>
 #include <kernel/terminal.h>
 #include <kernel/gdt.h>
+#include <kernel/idt.h>
  
 #if defined(__cplusplus)
 extern "C" /* Use C linkage for kernel_main. */
@@ -42,6 +43,8 @@ void kernel_main()
 
 	if(apros_setup_gdt() > 0)
 		terminal_printf("GDT correctly setted !\n");
+	if(apros_setup_idt())
+		terminal_printf("IDT correctly setted ! \n");
 
 	for(;;)
 		continue;

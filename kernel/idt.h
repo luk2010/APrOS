@@ -1,8 +1,8 @@
 ///////////////////////////////////////////////////////////////////
 /**
-    @file base.h
+    @file idt.h
     
-    Defines some things and includes some basics files.
+    IDT functions and definitions.
 **/
 ///////////////////////////////////////////////////////////////////
 /* Copyright (C) 2013, Luk2010
@@ -22,27 +22,29 @@
    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
    USA. 
 */
-#ifndef APROS_BASE_H
-#define APROS_BASE_H
+#ifndef APROS_IDT_H
+#define APROS_IDT_H
 
-#if !defined(__cplusplus)
-#include <stdbool.h> /* C doesn't have booleans by default. */
-#endif
-#include <stddef.h>
-#include <stdint.h>
-#include <stdarg.h>
- 
-/* Check if the compiler thinks if we are targeting the wrong operating system. */
-#if defined(__linux__)
-#error "You are not using a cross-compiler, you will most certainly run into trouble"
-#endif
+#include <kernel/base.h>
 
-/** Generic virtual address (kernel or user) */
-typedef unsigned int vaddr_t;
+/* CPU exceptions as defined by Intel. */
+#define APROS_EXCEPT_BASE 0
+#define APROS_EXCEPT_NUM  32
+#define APROS_EXCEPT_MAX  (APROS_EXCEPT_BASE + APROS_EXCEPT_NUM - 1)
 
-bool is_in_range_strict(int i, int min, int max);
-bool is_in_range(int i, int min, int max);
+/* IRQ lines in the IDT */
+#define APROS_IRQ_BASE 0
+#define APROS_IRQ_NUM  32
+#define APROS_IRQ_MAX  (APROS_EXCEPT_BASE + APROS_EXCEPT_NUM - 1)
 
-#endif
+/* IDT entries */
+#define APROS_IDT_NUM  256
+#define APROS_IDT_MAX  APROS_IDT_NUM - 1
 
+/* Initialize every idt entries and mark them not present. */
+bool apros_setup_idt();
 
+bool apros_idt_set_handler(int index, vaddr_t handler_adress, int lowest_privilege);
+void apros_idt_get_handler(int index, vaddr_t* handler_return, int* privilege_return);
+
+#endif // APROS_IDT_H

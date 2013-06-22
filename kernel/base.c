@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////
 /**
-    @file base.h
+    @file base.c
     
     Defines some things and includes some basics files.
 **/
@@ -22,27 +22,14 @@
    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
    USA. 
 */
-#ifndef APROS_BASE_H
-#define APROS_BASE_H
+#include <kernel/base.h>
 
-#if !defined(__cplusplus)
-#include <stdbool.h> /* C doesn't have booleans by default. */
-#endif
-#include <stddef.h>
-#include <stdint.h>
-#include <stdarg.h>
- 
-/* Check if the compiler thinks if we are targeting the wrong operating system. */
-#if defined(__linux__)
-#error "You are not using a cross-compiler, you will most certainly run into trouble"
-#endif
+bool is_in_range_strict(int i, int min, int max)
+{
+	return ((i >= max) || (i <= min)) ? false : true;
+}
 
-/** Generic virtual address (kernel or user) */
-typedef unsigned int vaddr_t;
-
-bool is_in_range_strict(int i, int min, int max);
-bool is_in_range(int i, int min, int max);
-
-#endif
-
-
+bool is_in_range(int i, int min, int max)
+{
+	return ((i > max) || (i < min)) ? false : true;
+}
